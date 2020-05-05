@@ -1,0 +1,20 @@
+@import url(https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&family=Rubik:wght@500&display=swap);
+
+$theme-colors: (
+    // "info": tomato,
+    // "danger": teal,
+    "primary": #3EC1D3,
+    "secondary": #F8F3D4,
+    "third": #88D498,
+    "forth": #C6DABF,
+    "fifth": #F3E9D2,
+    "cancel": rgb(97, 106, 114)
+);
+
+$font-family-base: 'Inconsolata', monospace;
+
+body {
+    background-color: #EDEDED !important;
+}
+
+@import "~bootstrap/scss/bootstrap";
