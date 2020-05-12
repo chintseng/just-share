@@ -1,4 +1,11 @@
+import { v4 as uuidv4 } from 'uuid';
+import firebase from 'firebase/app';
+import 'firebase/storage';
+import { FIREBASE_CONFIG } from '../secrets';
 import { mockEvents, mockGroups } from './mockData';
+
+firebase.initializeApp(FIREBASE_CONFIG);
+const storage = firebase.storage();
 
 export const getAllEventsAPI = async (token) => {
   const events = mockEvents;
@@ -12,8 +19,16 @@ export const getAllEventsAPI = async (token) => {
   }));
 };
 
-export const createEventAPI = async (token) => {
-
+export const createEventAPI = async (token, event) => {
+  const { photos } = event;
+  const urls = await Promise.all(photos.map(async (photo) => {
+    const ref = storage.ref().child(`photos/${uuidv4()}.jpg`);
+    await ref.putString(photo.image, 'data_url');
+    const url = await ref.getDownloadURL();
+    return {
+      url,
+    };
+  }));
 };
 
 export const getGroupsAPI = async (token) => mockGroups;

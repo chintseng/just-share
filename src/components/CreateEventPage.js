@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid'; // For version 5
+import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
@@ -7,6 +8,7 @@ import Col from 'react-bootstrap/Col';
 import CenterContainer from './CenterContainer';
 import PageTitle from './PageTitle';
 import FlexHeightImage from './FlexHeightImage';
+import { createEvent } from '../store/actions/user';
 
 const styles = {
   form: {
@@ -19,6 +21,7 @@ const styles = {
 };
 
 const CreateEventPage = () => {
+  const dispatch = useDispatch();
   const [controls, setControls] = useState({
     name: {
       value: '',
@@ -38,6 +41,11 @@ const CreateEventPage = () => {
   });
   const handleFormSubmitted = (e) => {
     e.preventDefault();
+    const event = {
+      photos: controls.photos.value,
+    };
+    console.log(event);
+    dispatch(createEvent(event));
   };
   const handleInputChange = (key) => ({ target: { value } }) => {
     setControls({
@@ -120,7 +128,7 @@ const CreateEventPage = () => {
           </Form.Group>
           <div style={styles.buttonDiv}>
             <Button style={styles.button} variant="primary" type="submit">
-              Sign in
+              Create
             </Button>
           </div>
         </Form>
