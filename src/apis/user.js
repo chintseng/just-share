@@ -29,6 +29,7 @@ export const createEventAPI = async (token, event) => {
       url,
     };
   }));
+  console.log(urls);
 };
 
 export const getGroupsAPI = async (token) => mockGroups;

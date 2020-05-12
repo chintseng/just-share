@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+// import Button from 'react-bootstrap/Button';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Avatar from './Avatar';
 
 const styles = {

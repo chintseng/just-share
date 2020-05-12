@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import HomePage from './HomePage';
 import { getAllEvents } from '../store/actions/user';
+import { connectMqtt } from '../store/actions/mqtt';
 import EventPage from './EventPage';
 import { USER_GET_EVENTS } from '../store/loadingTypes';
 import GroupPage from './GroupPage';
@@ -24,6 +25,7 @@ const MainApp = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllEvents());
+    dispatch(connectMqtt());
     setLoadStarted(true);
   }, [dispatch]);
   return (!isLoading && loadStarted) && (

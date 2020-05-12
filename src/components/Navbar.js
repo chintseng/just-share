@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import { signOut } from '../store/actions/auth';
+import Notification from './Notification';
 // import Notification from './Notification';
 
 const styles = {
@@ -23,7 +24,7 @@ const NavBar = ({ history }) => {
   const handleLoginClicked = () => {
     history.push('login');
   };
-  const handleBrandClicked = () => history.push('/');
+  const handleBrandClicked = () => history.push('/home');
   const isAuthenticated = useSelector((state) => Boolean(state.auth.token));
   const handleMyGroupsClicked = () => history.push('/mygroups');
   const handleAddEventClicked = () => history.push('/createevent');
@@ -31,7 +32,6 @@ const NavBar = ({ history }) => {
   return (
     <Navbar bg="primary" style={styles.container} fixed="top">
       <>
-        {/* <Notification /> */}
         <Navbar.Brand style={styles.brand} onClick={handleBrandClicked}>
           JustShare
         </Navbar.Brand>
@@ -39,6 +39,7 @@ const NavBar = ({ history }) => {
         <Navbar.Collapse className="justify-content-end">
           {isAuthenticated ? (
             <>
+              <Notification />
               <Button style={{ color: 'white' }} onClick={handleMyGroupsClicked}>My Groups</Button>
               <Button style={{ color: 'white' }} onClick={handleAddEventClicked}>Add Event</Button>
               <Button style={{ color: 'white' }} onClick={handleLogOutClicked}>Logout</Button>

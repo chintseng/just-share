@@ -6,11 +6,13 @@ import thunk from 'redux-thunk';
 import ui from './reducers/ui';
 import auth from './reducers/auth';
 import user from './reducers/user';
+import mqtt from './reducers/mqtt';
 
 const rootReducer = combineReducers({
   ui,
   auth,
   user,
+  mqtt,
 });
 
 let composeEnhancers = compose;
