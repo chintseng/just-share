@@ -12,4 +12,8 @@ export const getAllEventsAPI = async (token) => {
   }));
 };
 
+export const createEventAPI = async (token) => {
+
+};
+
 export const getGroupsAPI = async (token) => mockGroups;

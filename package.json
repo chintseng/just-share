@@ -6,10 +6,13 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
+    "@hellosirandy/rest-api-wrapper": "^1.7.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.4.1",
+    "moment": "^2.25.3",
+    "mqtt": "^4.0.1",
     "node-sass": "^4.14.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
@@ -23,7 +26,7 @@
     "uuid": "^8.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "REACT_APP_ENDPOINT=http://flask-env.eba-m2jsxfrb.us-west-2.elasticbeanstalk.com react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

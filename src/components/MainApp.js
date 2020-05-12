@@ -10,6 +10,7 @@ import { USER_GET_EVENTS } from '../store/loadingTypes';
 import GroupPage from './GroupPage';
 import MyGroupsPage from './MyGroupsPage';
 import CreateGroupPage from './CreateGroupPage';
+import CreateEventPage from './CreateEventPage';
 
 const styles = {
   container: {
@@ -33,6 +34,7 @@ const MainApp = () => {
         <Route path="/group/:gid" exact component={GroupPage} />
         <Route path="/mygroups" exact component={MyGroupsPage} />
         <Route path="/creategroup" exact component={CreateGroupPage} />
+        <Route path="/createevent" exact component={CreateEventPage} />
       </Switch>
     </div>
   );

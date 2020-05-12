@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import { signOut } from '../store/actions/auth';
+// import Notification from './Notification';
 
 const styles = {
   container: {
@@ -18,17 +19,19 @@ const styles = {
 };
 
 const NavBar = ({ history }) => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const handleLoginClicked = () => {
     history.push('login');
   };
   const handleBrandClicked = () => history.push('/');
   const isAuthenticated = useSelector((state) => Boolean(state.auth.token));
   const handleMyGroupsClicked = () => history.push('/mygroups');
-  // const handleLogOutClicked = () => dispatch(signOut());
+  const handleAddEventClicked = () => history.push('/createevent');
+  const handleLogOutClicked = () => dispatch(signOut());
   return (
     <Navbar bg="primary" style={styles.container} fixed="top">
       <>
+        {/* <Notification /> */}
         <Navbar.Brand style={styles.brand} onClick={handleBrandClicked}>
           JustShare
         </Navbar.Brand>
@@ -37,7 +40,8 @@ const NavBar = ({ history }) => {
           {isAuthenticated ? (
             <>
               <Button style={{ color: 'white' }} onClick={handleMyGroupsClicked}>My Groups</Button>
-              <Button style={{ color: 'white' }}>Add Event</Button>
+              <Button style={{ color: 'white' }} onClick={handleAddEventClicked}>Add Event</Button>
+              <Button style={{ color: 'white' }} onClick={handleLogOutClicked}>Logout</Button>
             </>
             // <Button onClick={handleLogOutClicked} style={{ color: 'white' }}>Logout</Button>
           )

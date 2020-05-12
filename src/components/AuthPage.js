@@ -34,11 +34,11 @@ const styles = {
 
 const AuthPage = () => {
   const [controls, setControls] = useState({
-    email: {
-      value: 'sac840711@gmail.com',
+    username: {
+      value: 'hellosirandy',
     },
     password: {
-      value: 'temp1234',
+      value: 'test1234',
     },
   });
 
@@ -57,29 +57,26 @@ const AuthPage = () => {
   const handleFormSubmitted = (event) => {
     event.preventDefault();
     const {
-      email: { value: email },
+      username: { value: username },
       password: { value: password },
     } = controls;
-    dispatch(signIn(email, password));
+    dispatch(signIn(username, password));
   };
   return (
     <div style={styles.container}>
       <Form style={styles.form} onSubmit={handleFormSubmitted}>
         <Form.Text style={styles.header}>Login</Form.Text>
         <Form.Group>
-          <Form.Label>Email address</Form.Label>
+          <Form.Label>Username</Form.Label>
           <Form.Control
-            isInvalid={!controls.email.valid}
-            onChange={handleInputChange('email')}
-            type="email"
-            value={controls.email.value}
+            onChange={handleInputChange('username')}
+            value={controls.username.value}
           />
         </Form.Group>
 
         <Form.Group controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
-            isInvalid={!controls.password.valid}
             onChange={handleInputChange('password')}
             type="password"
             value={controls.password.value}
