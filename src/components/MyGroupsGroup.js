@@ -33,7 +33,7 @@ const MyGroupsGroup = ({ group }) => (
     </div>
 
     <div>
-      {group.members.map((member) => <Avatar radius={80} key={member.uid} image={member.uid} />)}
+      {group.users.map((user) => <Avatar radius={80} key={user.id} image={user.id.toString()} />)}
     </div>
   </div>
 );

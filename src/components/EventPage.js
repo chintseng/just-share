@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -30,29 +31,30 @@ const styles = {
   },
 };
 
+const tags = [
+  'All',
+  'Bestshots',
+  'People',
+  'Landscape',
+];
+
 const EventPage = ({ match, history }) => {
   const [tagSelected, setTagSelected] = useState('All');
   const { eid } = match.params;
   const events = useSelector((state) => state.user.events);
-  const event = events.find((e) => e.eid === eid);
+  const event = events.find((e) => e.id.toString() === eid);
   const handleTagClicked = (tag) => () => {
     setTagSelected(tag);
   };
-  const images = [];
-  for (let i = 0; i < 20; i += 1) {
-    images.push({
-      url: event.image,
-    });
-  }
 
   const handleGroupClicked = () => {
-    history.push(`/group/${event.group.gid}`);
+    history.push(`/group/${event.group.id}`);
   };
   return (
     <CenterContainer>
       <>
         <div style={styles.headerSection}>
-          <PageTitle>{event.title}</PageTitle>
+          <PageTitle>{event.name}</PageTitle>
           <div>
             <SubscriptionButton selected>People</SubscriptionButton>
             <SubscriptionButton last>Landscape</SubscriptionButton>
@@ -60,11 +62,11 @@ const EventPage = ({ match, history }) => {
         </div>
         <hr />
         <div style={styles.subSection}>
-          <h5 style={styles.date}>{event.date}</h5>
+          <h5 style={styles.date}>{moment(new Date(event.added_date)).format('L')}</h5>
           <Button variant="link" style={styles.group} onClick={handleGroupClicked}>{event.group.name}</Button>
         </div>
         <div>
-          {event.tags.map((tag) => (
+          {tags.map((tag) => (
             <Tag
               key={tag}
               selected={tagSelected === tag}
@@ -73,7 +75,7 @@ const EventPage = ({ match, history }) => {
             />
           ))}
         </div>
-        <EventAlbum images={images} />
+        <EventAlbum images={event.pictures} />
       </>
     </CenterContainer>
   );

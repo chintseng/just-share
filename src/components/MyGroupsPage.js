@@ -23,7 +23,7 @@ const MyGroupsPage = ({ history }) => {
         <PageTitle>My Groups</PageTitle>
         <Button style={styles.button} onClick={handleAddGroupClicked}>+ Add a group</Button>
         <div>
-          {Object.keys(groups).map((gid) => <MyGroupsGroup key={gid} group={groups[gid]} />)}
+          {groups.map((group) => <MyGroupsGroup key={group.id} group={group} />)}
         </div>
       </>
     </CenterContainer>

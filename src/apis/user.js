@@ -1,35 +1,72 @@
 import { v4 as uuidv4 } from 'uuid';
+import API from '@hellosirandy/rest-api-wrapper';
 import firebase from 'firebase/app';
 import 'firebase/storage';
 import { FIREBASE_CONFIG } from '../secrets';
-import { mockEvents, mockGroups } from './mockData';
 
 firebase.initializeApp(FIREBASE_CONFIG);
 const storage = firebase.storage();
 
-export const getAllEventsAPI = async (token) => {
-  const events = mockEvents;
-  return events.map((event) => ({
-    ...event,
-    group: {
-      ...mockGroups[event.gid],
-      gid: event.gid,
-    },
-    gid: undefined,
-  }));
+const baseURL = process.env.REACT_APP_ENDPOINT;
+const api = new API(baseURL);
+
+export const getAllEventsAPI = (token) => {
+  // const events = mockEvents;
+  // return events.map((event) => ({
+  //   ...event,
+  //   group: {
+  //     ...mockGroups[event.gid],
+  //     gid: event.gid,
+  //   },
+  //   gid: undefined,
+  // }));
+  const options = {
+    endpoint: '/events',
+    token: `Bearer ${token}`,
+  };
+  return api.get(options);
 };
 
 export const createEventAPI = async (token, event) => {
-  const { photos } = event;
+  const {
+    photos, name, gid, date,
+  } = event;
   const urls = await Promise.all(photos.map(async (photo) => {
     const ref = storage.ref().child(`photos/${uuidv4()}.jpg`);
     await ref.putString(photo.image, 'data_url');
     const url = await ref.getDownloadURL();
-    return {
-      url,
-    };
+    return url;
   }));
-  console.log(urls);
+  const body = {
+    name,
+    group: {
+      id: Number(gid),
+    },
+    added_date: date,
+    pictures: urls,
+  };
+  const options = {
+    endpoint: '/events',
+    token: `Bearer ${token}`,
+    body,
+  };
+  return api.post(options);
 };
 
-export const getGroupsAPI = async (token) => mockGroups;
+export const createGroupAPI = async (token, group) => {
+  const options = {
+    endpoint: '/groups',
+    token: `Bearer ${token}`,
+    body: group,
+  };
+  return api.post(options);
+};
+
+export const getAllGroupsAPI = async (token) => {
+  // return mockGroups
+  const options = {
+    endpoint: '/groups',
+    token: `Bearer ${token}`,
+  };
+  return api.get(options);
+};

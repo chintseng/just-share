@@ -18,7 +18,7 @@ const HomePage = () => {
       <Container fluid>
         <Row>
           {events.map((event) => (
-            <Col xs={3} key={event.eid}>
+            <Col xs={3} key={event.id}>
               <HomePageCard event={event} />
             </Col>
           ))}
