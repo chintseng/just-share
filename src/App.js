@@ -42,7 +42,7 @@ const App = () => {
           }}
         />
         <Route
-          path="/(home|event|group|mygroups|creategroup|createevent)"
+          path="/(home|event|group|mygroups|creategroup|createevent|message)"
           render={(p) => {
             if (isAuthenticated) {
               return (<MainApp />);

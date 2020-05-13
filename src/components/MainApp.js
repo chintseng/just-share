@@ -12,6 +12,7 @@ import GroupPage from './GroupPage';
 import MyGroupsPage from './MyGroupsPage';
 import CreateGroupPage from './CreateGroupPage';
 import CreateEventPage from './CreateEventPage';
+import MessagePage from './MessagePage';
 
 const styles = {
   container: {
@@ -37,6 +38,7 @@ const MainApp = () => {
         <Route path="/mygroups" exact component={MyGroupsPage} />
         <Route path="/creategroup" exact component={CreateGroupPage} />
         <Route path="/createevent" exact component={CreateEventPage} />
+        <Route path="/message" exact component={MessagePage} />
       </Switch>
     </div>
   );
