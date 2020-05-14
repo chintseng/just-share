@@ -1,7 +1,8 @@
-import { USER_SET_EVENTS } from '../actionTypes';
+import { USER_SET_EVENTS, USER_SET_CURRENT_EVENT } from '../actionTypes';
 
 const initialState = {
   events: [],
+  currentEvent: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -11,6 +12,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         events: action.events,
         groups: action.groups,
+      };
+    case USER_SET_CURRENT_EVENT:
+      return {
+        ...state,
+        currentEvent: action.currentEvent,
       };
     default:
       return state;

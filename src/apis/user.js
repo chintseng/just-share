@@ -32,10 +32,8 @@ export const createEventAPI = async (token, event) => {
   const {
     photos, name, gid, date,
   } = event;
-  if (name.trim() === '' || gid.trim() === '' || !moment(date).isValid()) {
-    throw Error({
-      message: 'Something went wrong',
-    });
+  if (name.trim() === '' || gid.trim() === '' || !moment(new Date(date)).isValid()) {
+    throw Error('Something went wrong');
   }
 
   const urls = await Promise.all(photos.map(async (photo) => {
@@ -49,7 +47,7 @@ export const createEventAPI = async (token, event) => {
     group: {
       id: Number(gid),
     },
-    added_date: moment(date).format('L'),
+    added_date: moment(new Date(date)).format('L'),
     pictures: urls,
   };
   const options = {
@@ -61,12 +59,34 @@ export const createEventAPI = async (token, event) => {
 };
 
 export const createGroupAPI = async (token, group) => {
+  const { name, members } = group;
+  if (name.trim() === '') {
+    throw Error('Something went wrong');
+  }
+  let userIds;
+  try {
+    userIds = members.split(',').map((id) => Number(id)).filter((id) => id);
+  } catch {
+    throw Error('Something went wrong');
+  }
   const options = {
     endpoint: '/groups',
     token: `Bearer ${token}`,
-    body: group,
+    body: {
+      name,
+      user_ids: userIds,
+    },
   };
   return api.post(options);
+};
+
+export const getEventAPI = async (token, eid) => {
+  const options = {
+    endpoint: `/event/${eid}`,
+    token: `Bearer ${token}`,
+  };
+
+  return api.get(options);
 };
 
 export const getAllGroupsAPI = async (token) => {
@@ -76,4 +96,18 @@ export const getAllGroupsAPI = async (token) => {
     token: `Bearer ${token}`,
   };
   return api.get(options);
+};
+
+export const subscribeClassAPI = async (token, eid, className) => {
+  if (className !== 'people' && className !== 'landscape') {
+    throw Error('Something went wrong');
+  }
+  const options = {
+    token: `Bearer ${token}`,
+    endpoint: `/event/${eid}/subscriptions`,
+    body: {
+      class: className,
+    },
+  };
+  return api.post(options);
 };

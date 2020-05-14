@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import CenterContainer from './CenterContainer';
@@ -9,6 +9,7 @@ import Tag from './Tag';
 import EventAlbum from './EventAlbum';
 import PageTitle from './PageTitle';
 import SubscriptionButton from './SubscriptionButton';
+import { getEvent, subscribeClass } from '../store/actions/user';
 
 const styles = {
   date: {
@@ -39,25 +40,49 @@ const tags = [
 ];
 
 const EventPage = ({ match, history }) => {
-  const [tagSelected, setTagSelected] = useState('All');
   const { eid } = match.params;
-  const events = useSelector((state) => state.user.events);
-  const event = events.find((e) => e.id.toString() === eid);
+  const event = useSelector((state) => state.user.currentEvent);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getEvent(eid));
+  }, [dispatch, eid]);
+  const [tagSelected, setTagSelected] = useState('All');
   const handleTagClicked = (tag) => () => {
     setTagSelected(tag);
+  };
+
+  const handleSubscribe = (className) => async () => {
+    try {
+      await dispatch(subscribeClass(eid, className));
+      await dispatch(getEvent(eid));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleGroupClicked = () => {
     history.push(`/group/${event.group.id}`);
   };
-  return (
+  return event && (
     <CenterContainer>
       <>
         <div style={styles.headerSection}>
           <PageTitle>{event.name}</PageTitle>
           <div>
-            <SubscriptionButton selected>People</SubscriptionButton>
-            <SubscriptionButton last>Landscape</SubscriptionButton>
+            <SubscriptionButton
+              selected={event.subscription.people}
+              onClick={handleSubscribe('people')}
+            >
+              People
+            </SubscriptionButton>
+            <SubscriptionButton
+              selected={event.subscription.landscape}
+              onClick={handleSubscribe('landscape')}
+              last
+            >
+              Landscape
+
+            </SubscriptionButton>
           </div>
         </div>
         <hr />

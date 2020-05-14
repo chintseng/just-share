@@ -23,22 +23,21 @@ const CreateGroupPage = () => {
     name: {
       value: '',
     },
-    member: {
+    members: {
       value: '',
     },
   });
   const [err, setErr] = useState(false);
   const dispatch = useDispatch();
-  const handleFormSubmitted = (e) => {
+  const handleFormSubmitted = async (e) => {
     e.preventDefault();
     try {
       const group = {
         name: controls.name.value,
-        user_ids: controls.member.value.split(',').map((id) => Number(id)),
+        members: controls.members.value,
       };
-      dispatch(createGroup(group));
+      await dispatch(createGroup(group));
     } catch (error) {
-      console.log(error);
       setErr(true);
     }
   };
@@ -69,8 +68,8 @@ const CreateGroupPage = () => {
           <Form.Group controlId="formBasicPassword">
             <Form.Label>Add Member</Form.Label>
             <Form.Control
-              onChange={handleInputChange('member')}
-              value={controls.member.value}
+              onChange={handleInputChange('members')}
+              value={controls.members.value}
             />
           </Form.Group>
           <div style={styles.buttonDiv}>
