@@ -4,16 +4,20 @@ import { uiStartLoading, uiStopLoading } from './ui';
 import { AUTH_SET_TOKEN, LOG_OUT } from '../actionTypes';
 import { signInAPI, refreshTokenAPI } from '../../apis/auth';
 
-const setToken = (token) => ({
+const setToken = (token, username) => ({
   type: AUTH_SET_TOKEN,
   token,
+  username,
 });
 
-const storeToken = (token, expirationTime, refreshToken) => (dispatch) => {
-  dispatch(setToken(token));
+const storeToken = (token, expirationTime, refreshToken, username) => (dispatch) => {
+  dispatch(setToken(token, username));
   localStorage.setItem('just_share:auth:token', token);
   localStorage.setItem('just_share:auth:expirationTime', expirationTime.toString());
   localStorage.setItem('just_share:auth:refreshToken', refreshToken);
+  if (username) {
+    localStorage.setItem('just_share:auth:username', username);
+  }
 };
 
 export const signIn = (username, password) => async (dispatch) => {
@@ -24,7 +28,7 @@ export const signIn = (username, password) => async (dispatch) => {
       refresh_token: refreshToken,
     } = await signInAPI(username, password);
     const expirationTime = moment().add(30, 'm').toDate().getTime();
-    dispatch(storeToken(token, expirationTime, refreshToken));
+    dispatch(storeToken(token, expirationTime, refreshToken, username));
     dispatch(uiStopLoading(AUTH_SIGNIN));
   } catch (e) {
     dispatch(uiStopLoading(AUTH_SIGNIN));
@@ -43,7 +47,8 @@ const validateToken = () => async (dispatch, getState) => {
     const parsedExpiration = new Date(parseInt(expirationFromStorage, 10));
     const now = new Date();
     if (parsedExpiration > now) {
-      dispatch(setToken(tokenFromStorage));
+      const username = localStorage.getItem('just_share:auth:username');
+      dispatch(setToken(tokenFromStorage, username));
       return tokenFromStorage;
     }
     throw new Error();

@@ -2,9 +2,10 @@ import mqtt from 'mqtt';
 import { MQTT_CREDENTIALS } from '../../secrets';
 import { MQTT_SET_CLIENT, MQTT_ADD_MESSAGE } from '../actionTypes';
 
-export const connectMqtt = () => (dispatch) => {
+export const connectMqtt = () => (dispatch, getState) => {
+  const { username } = getState().auth;
   const options = {
-    clientId: '1',
+    clientId: username,
     username: MQTT_CREDENTIALS.username,
     password: MQTT_CREDENTIALS.password,
     clean: false,

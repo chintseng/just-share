@@ -11,7 +11,7 @@ const EventAlbum = ({ images }) => (
       {images.map((image) => (
         <Col key={image.id} xs={3}>
           <div style={{ padding: 10 }}>
-            <FlexHeightImage image={image.url} height="100%" objectFit="contain" />
+            <FlexHeightImage image={image.url} height="100%" objectFit="cover" />
 
           </div>
         </Col>
