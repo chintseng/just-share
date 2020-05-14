@@ -6,6 +6,8 @@ import * as serviceWorker from './serviceWorker';
 import configureStore from './store/configureStore';
 import './App.scss';
 
+window.ethereum.enable();
+
 const store = configureStore();
 
 const RRedux = () => (

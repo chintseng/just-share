@@ -4,7 +4,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Web3 from 'web3';
-import Row from 'react-bootstrap/Row';
 import CenterContainer from './CenterContainer';
 import PageTitle from './PageTitle';
 
@@ -60,6 +59,11 @@ const styles = {
     color: 'white',
     borderRadius: 999,
   },
+  headerSection: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
 };
 
 const MessagePage = () => {
@@ -67,33 +71,32 @@ const MessagePage = () => {
     newMessage: {
       value: '',
     },
+    anonymous: {
+      value: true,
+    },
   });
 
   const [messages, setMessages] = useState([]);
+
+  const fetchMessagesOwners = async () => {
+    const [allMessages, allOwners] = await Promise.all([
+      MyContract.methods.getMessages().call({ from: web3.eth.defaultAccount }),
+      MyContract.methods.getOwners().call({ from: web3.eth.defaultAccount }),
+    ]);
+    const result = allMessages.map((msg, i) => ({ value: msg, owner: allOwners[i] }));
+    setMessages(result);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       const accunts = await web3.eth.getAccounts();
       [web3.eth.defaultAccount] = accunts;
-      const allMessages = await MyContract.methods.getMessages().call({ from: web3.eth.defaultAccount });
-      const allOwners = await MyContract.methods.getOwners().call({ from: web3.eth.defaultAccount });
-      const result = allMessages.map((msg, i) => ({ value: msg, owner: allOwners[i] }));
-      setMessages(result);
+      await fetchMessagesOwners();
     };
     fetchData();
   });
 
-
-  const handleFormSubmitted = (e) => {
-    e.preventDefault();
-    handleInputChange('newMessage')({ target: { value: '' } });
-    MyContract.methods.addMessage(controls.newMessage.value).send({ from: web3.eth.defaultAccount })
-      .then((receipt) => {
-        console.log(receipt);
-      });
-  };
   const handleInputChange = (key) => ({ target: { value } }) => {
-    // const value = e.target.value;
     setControls({
       ...controls,
       [key]: {
@@ -103,35 +106,47 @@ const MessagePage = () => {
     });
   };
 
-  const handleRefresh = () => {
-    MyContract.methods.getMessages().call({ from: web3.eth.defaultAccount }, (error, result) => {
-      console.log(result);
-    });
-    MyContract.methods.getOwners().call({ from: web3.eth.defaultAccount }, (error, result) => {
-      console.log(error, result);
-    });
+  const handleFormSubmitted = (e) => {
+    e.preventDefault();
+    handleInputChange('newMessage')({ target: { value: '' } });
+    MyContract.methods
+      .addMessage(`${controls.anonymous.value ? '' : 'Andy:'}${controls.newMessage.value}`)
+      .send({ from: web3.eth.defaultAccount });
+  };
+
+  const handleAnonymousToggle = () => {
+    handleInputChange('anonymous')({ target: { value: !controls.anonymous.value } });
   };
 
   return (
     <CenterContainer>
       <>
-        <PageTitle>Message Board</PageTitle>
+        <div style={styles.headerSection}>
+          <PageTitle>Message Board</PageTitle>
+          <div>
+            <Button style={styles.button} variant="primary" onClick={fetchMessagesOwners}>
+              Refresh Messages
+            </Button>
+          </div>
+        </div>
+
         <Form onSubmit={handleFormSubmitted}>
-          <Form.Group controlId="exampleForm.ControlTextarea1">
+          <Form.Group>
             <Form.Label>Leave a message:</Form.Label>
             <Form.Control value={controls.newMessage.value} as="textarea" rows="3" onChange={handleInputChange('newMessage')} />
+          </Form.Group>
+          <Form.Group>
+            <Form.Check type="checkbox" label="Anonymous" checked={controls.anonymous.value} onChange={handleAnonymousToggle} />
           </Form.Group>
           <Button style={styles.button} variant="primary" type="submit">
             Submit
           </Button>
         </Form>
 
-        <Button style={styles.button} variant="primary" onClick={handleRefresh}>
-          Refresh Messages
-        </Button>
-        <Row>
+
+        <div style={{ marginTop: 30 }}>
           {messages.map((msg) => (
-            <Card style={{ width: '100%' }} key={uuidv4()}>
+            <Card style={{ width: '100%', marginBottom: 20 }} key={uuidv4()}>
               <Card.Header>{msg.owner}</Card.Header>
               <Card.Body>
                 <Card.Text>
@@ -140,7 +155,7 @@ const MessagePage = () => {
               </Card.Body>
             </Card>
           ))}
-        </Row>
+        </div>
       </>
     </CenterContainer>
   );
