@@ -1,14 +1,16 @@
 import React, { useState, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid'; // For version 5
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CenterContainer from './CenterContainer';
 import PageTitle from './PageTitle';
 import FlexHeightImage from './FlexHeightImage';
 import { createEvent } from '../store/actions/user';
+import { USER_CREATE_EVENT } from '../store/loadingTypes';
 
 const styles = {
   form: {
@@ -18,10 +20,14 @@ const styles = {
     color: 'white',
     borderRadius: 999,
   },
+  buttonDiv: {
+    marginTop: 50,
+  },
 };
 
 const CreateEventPage = () => {
   const dispatch = useDispatch();
+  const [err, setErr] = useState(false);
   const [controls, setControls] = useState({
     name: {
       value: '',
@@ -35,17 +41,20 @@ const CreateEventPage = () => {
     photos: {
       value: [],
     },
-    subscription: {
-      value: [],
-    },
   });
-  const handleFormSubmitted = (e) => {
+  const handleFormSubmitted = async (e) => {
     e.preventDefault();
-    const event = {
-      photos: controls.photos.value,
-    };
-    console.log(event);
-    dispatch(createEvent(event));
+    try {
+      const event = {
+        photos: controls.photos.value,
+        name: controls.name.value,
+        date: controls.date.value,
+        gid: controls.group.value,
+      };
+      await dispatch(createEvent(event));
+    } catch (error) {
+      setErr(true);
+    }
   };
   const handleInputChange = (key) => ({ target: { value } }) => {
     setControls({
@@ -76,12 +85,14 @@ const CreateEventPage = () => {
   };
 
   const inputRef = useRef();
+  const isLoading = useSelector((state) => Boolean(state.ui.isLoading[USER_CREATE_EVENT]));
 
   return (
     <CenterContainer>
       <>
         <PageTitle>Create an event</PageTitle>
         <Form style={styles.form} onSubmit={handleFormSubmitted}>
+          <Alert show={err} variant="danger">Something went wrong</Alert>
           <Form.Group>
             <Form.Label>Event Name</Form.Label>
             <Form.Control
@@ -93,8 +104,15 @@ const CreateEventPage = () => {
           <Form.Group>
             <Form.Label>Date</Form.Label>
             <Form.Control
-              onChange={handleInputChange('member')}
+              onChange={handleInputChange('date')}
               value={controls.date.value}
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Group</Form.Label>
+            <Form.Control
+              onChange={handleInputChange('group')}
+              value={controls.group.value}
             />
           </Form.Group>
           <Form.Group>
@@ -102,7 +120,7 @@ const CreateEventPage = () => {
             <div>
               <Row style={{ marginBottom: 20 }}>
                 {controls.photos.value.map((photo) => (
-                  <Col xs={4} key={photo.key}>
+                  <Col xs={4} key={photo.key} style={{ marginBottom: 20 }}>
                     <FlexHeightImage image={photo.image} />
                   </Col>
                 ))}
@@ -127,8 +145,13 @@ const CreateEventPage = () => {
             </div>
           </Form.Group>
           <div style={styles.buttonDiv}>
-            <Button style={styles.button} variant="primary" type="submit">
-              Create
+            <Button
+              style={styles.button}
+              variant="primary"
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? '...Creating' : 'Create'}
             </Button>
           </div>
         </Form>

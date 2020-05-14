@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
 import CenterContainer from './CenterContainer';
 import PageTitle from './PageTitle';
+import { createGroup } from '../store/actions/user';
+import { USER_CREATE_GROUP } from '../store/loadingTypes';
 
 const styles = {
   form: {
@@ -19,12 +23,23 @@ const CreateGroupPage = () => {
     name: {
       value: '',
     },
-    member: {
+    members: {
       value: '',
     },
   });
-  const handleFormSubmitted = (e) => {
+  const [err, setErr] = useState(false);
+  const dispatch = useDispatch();
+  const handleFormSubmitted = async (e) => {
     e.preventDefault();
+    try {
+      const group = {
+        name: controls.name.value,
+        members: controls.members.value,
+      };
+      await dispatch(createGroup(group));
+    } catch (error) {
+      setErr(true);
+    }
   };
   const handleInputChange = (key) => ({ target: { value } }) => {
     setControls({
@@ -35,11 +50,13 @@ const CreateGroupPage = () => {
       },
     });
   };
+  const isLoading = useSelector((state) => Boolean(state.ui.isLoading[USER_CREATE_GROUP]));
   return (
     <CenterContainer>
       <>
         <PageTitle>Create a group</PageTitle>
         <Form style={styles.form} onSubmit={handleFormSubmitted}>
+          <Alert show={err} variant="danger">Something went wrong</Alert>
           <Form.Group>
             <Form.Label>Group Name</Form.Label>
             <Form.Control
@@ -51,13 +68,18 @@ const CreateGroupPage = () => {
           <Form.Group controlId="formBasicPassword">
             <Form.Label>Add Member</Form.Label>
             <Form.Control
-              onChange={handleInputChange('member')}
-              value={controls.member.value}
+              onChange={handleInputChange('members')}
+              value={controls.members.value}
             />
           </Form.Group>
           <div style={styles.buttonDiv}>
-            <Button style={styles.button} variant="primary" type="submit">
-              Sign in
+            <Button
+              style={styles.button}
+              variant="primary"
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? '...Creating' : 'Create'}
             </Button>
           </div>
         </Form>

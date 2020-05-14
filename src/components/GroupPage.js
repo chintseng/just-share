@@ -23,19 +23,19 @@ const GroupPage = ({ match }) => {
   const groups = useSelector((state) => state.user.groups);
   const events = useSelector(
     (state) => state.user.events,
-  ).filter((event) => event.group.gid === gid);
-  const group = groups[gid];
+  ).filter((event) => event.group.id.toString() === gid);
+  const group = groups.find((g) => g.id.toString() === gid);
   return (
     <CenterContainer>
       <>
         <PageTitle>{group.name}</PageTitle>
         <div>
-          {group.members.map((member) => <Avatar key={member.uid} image={member.uid} />)}
+          {group.users.map((user) => <Avatar key={user.id} image={user.id.toString()} />)}
         </div>
         <Container fluid style={styles.eventsField}>
           <Row>
             {events.map((event) => (
-              <Col xs={4} key={event.eid}>
+              <Col xs={4} key={event.id}>
                 <GroupPageCard event={event} />
               </Col>
             ))}

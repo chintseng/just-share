@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import moment from 'moment';
 import Card from 'react-bootstrap/Card';
 import FlexHeightImage from './FlexHeightImage';
 
@@ -23,15 +24,15 @@ const styles = {
 
 const HomePageCard = ({ event, history }) => {
   const handleCardClicked = () => {
-    history.push(`/event/${event.eid}`);
+    history.push(`/event/${event.id}`);
   };
   return (
     <Card style={styles.container} onClick={handleCardClicked}>
-      <FlexHeightImage image={event.image} height="60%" />
+      <FlexHeightImage image={event.pictures[0].url} height="60%" />
       <Card.Body style={styles.body}>
-        <Card.Title>{event.title}</Card.Title>
-        <Card.Subtitle>{event.date}</Card.Subtitle>
-        <Card.Subtitle style={styles.subsubtitle}>{`${event.photos} photos`}</Card.Subtitle>
+        <Card.Title>{event.name}</Card.Title>
+        <Card.Subtitle>{moment(new Date(event.added_date)).format('L')}</Card.Subtitle>
+        <Card.Subtitle style={styles.subsubtitle}>{`${event.pictures.length} photos`}</Card.Subtitle>
         <Card.Subtitle style={styles.subsubtitle}>{`With ${event.group.name}`}</Card.Subtitle>
       </Card.Body>
     </Card>
