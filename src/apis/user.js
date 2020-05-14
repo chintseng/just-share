@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import API from '@hellosirandy/rest-api-wrapper';
+import moment from 'moment';
 import firebase from 'firebase/app';
 import 'firebase/storage';
 import { FIREBASE_CONFIG } from '../secrets';
@@ -31,6 +32,12 @@ export const createEventAPI = async (token, event) => {
   const {
     photos, name, gid, date,
   } = event;
+  if (name.trim() === '' || gid.trim() === '' || !moment(date).isValid()) {
+    throw Error({
+      message: 'Something went wrong',
+    });
+  }
+
   const urls = await Promise.all(photos.map(async (photo) => {
     const ref = storage.ref().child(`photos/${uuidv4()}.jpg`);
     await ref.putString(photo.image, 'data_url');
@@ -42,7 +49,7 @@ export const createEventAPI = async (token, event) => {
     group: {
       id: Number(gid),
     },
-    added_date: date,
+    added_date: moment(date).format('L'),
     pictures: urls,
   };
   const options = {
