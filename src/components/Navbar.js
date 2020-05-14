@@ -26,6 +26,7 @@ const NavBar = ({ history }) => {
   };
   const handleBrandClicked = () => history.push('/home');
   const isAuthenticated = useSelector((state) => Boolean(state.auth.token));
+  const handleMessageBoardClicked = () => history.push('/message');
   const handleMyGroupsClicked = () => history.push('/mygroups');
   const handleAddEventClicked = () => history.push('/createevent');
   const handleLogOutClicked = () => dispatch(signOut());
@@ -40,6 +41,7 @@ const NavBar = ({ history }) => {
           {isAuthenticated ? (
             <>
               <Notification />
+              <Button style={{ color: 'white' }} onClick={handleMessageBoardClicked}>Message Board</Button>
               <Button style={{ color: 'white' }} onClick={handleMyGroupsClicked}>My Groups</Button>
               <Button style={{ color: 'white' }} onClick={handleAddEventClicked}>Add Event</Button>
               <Button style={{ color: 'white' }} onClick={handleLogOutClicked}>Logout</Button>
