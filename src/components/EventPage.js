@@ -42,6 +42,7 @@ const tags = [
 const EventPage = ({ match, history }) => {
   const { eid } = match.params;
   const event = useSelector((state) => state.user.currentEvent);
+  const client = useSelector((state) => state.mqtt.client);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getEvent(eid));
@@ -55,6 +56,7 @@ const EventPage = ({ match, history }) => {
     try {
       await dispatch(subscribeClass(eid, className));
       await dispatch(getEvent(eid));
+      client.subscribe(`${eid}/${className}`, { qos: 1 });
     } catch (e) {
       console.log(e);
     }

@@ -6,6 +6,8 @@ const styles = {
     width: '100%',
     height: 0,
     position: 'relative',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
   },
   coverImg: {
     width: '100%',
@@ -18,8 +20,14 @@ const styles = {
 
 const FlexHeightImage = ({ image, height, objectFit }) => (
   <>
-    <div style={{ ...styles.cover, paddingTop: height, objectFit }}>
-      <img src={image} style={styles.coverImg} alt="" />
+    <div style={{
+      ...styles.cover,
+      paddingTop: height,
+      backgroundImage: `url(${image})`,
+      backgroundSize: objectFit,
+    }}
+    >
+      {/* <img src={image} style={{ ...styles.coverImg, objectFit }} alt="" /> */}
     </div>
   </>
 );

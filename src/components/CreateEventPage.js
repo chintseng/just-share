@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid'; // For version 5
+import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -25,7 +27,7 @@ const styles = {
   },
 };
 
-const CreateEventPage = () => {
+const CreateEventPage = ({ history }) => {
   const dispatch = useDispatch();
   const [err, setErr] = useState(false);
   const [controls, setControls] = useState({
@@ -161,4 +163,4 @@ const CreateEventPage = () => {
   );
 };
 
-export default CreateEventPage;
+export default withRouter(CreateEventPage);
