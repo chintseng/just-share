@@ -43,7 +43,7 @@ export const createEvent = (event) => async (dispatch) => {
   try {
     const { photos } = event;
     const urls = await uploadImagesAPI(photos);
-    await createEventAPI(token, {
+    const a = await createEventAPI(token, {
       name: event.name,
       gid: event.gid,
       date: event.date,
@@ -51,6 +51,7 @@ export const createEvent = (event) => async (dispatch) => {
     });
     await dispatch(getAllEvents(false));
     dispatch(uiStopLoading(USER_CREATE_EVENT));
+    return a.id;
   } catch (e) {
     dispatch(uiStopLoading(USER_CREATE_EVENT));
     throw (e);

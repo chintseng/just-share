@@ -23,8 +23,11 @@ export const createEventAPI = async (token, event) => {
   const {
     urls, name, gid, date,
   } = event;
+  if (gid === 'choose') {
+    throw new Error('Please select a group');
+  }
   if (name.trim() === '' || gid.trim() === '' || !moment(new Date(date)).isValid()) {
-    throw Error('Something went wrong');
+    throw new Error('Something went wrong');
   }
 
   // const urls = await Promise.all(photos.map(async (photo) => {

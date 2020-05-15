@@ -28,8 +28,9 @@ const styles = {
 };
 
 const CreateEventPage = ({ history }) => {
+  const groups = useSelector((state) => state.user.groups);
   const dispatch = useDispatch();
-  const [err, setErr] = useState(false);
+  const [err, setErr] = useState('');
   const [controls, setControls] = useState({
     name: {
       value: '',
@@ -38,7 +39,7 @@ const CreateEventPage = ({ history }) => {
       value: '',
     },
     group: {
-      value: '',
+      value: 'choose',
     },
     photos: {
       value: [],
@@ -53,9 +54,10 @@ const CreateEventPage = ({ history }) => {
         date: controls.date.value,
         gid: controls.group.value,
       };
-      await dispatch(createEvent(event));
+      const eid = await dispatch(createEvent(event));
+      history.push(`/event/${eid}`);
     } catch (error) {
-      setErr(true);
+      setErr(error.message);
     }
   };
   const handleInputChange = (key) => ({ target: { value } }) => {
@@ -94,10 +96,11 @@ const CreateEventPage = ({ history }) => {
       <>
         <PageTitle>Create an event</PageTitle>
         <Form style={styles.form} onSubmit={handleFormSubmitted}>
-          <Alert show={err} variant="danger">Something went wrong</Alert>
+          <Alert show={Boolean(err)} variant="danger">{err}</Alert>
           <Form.Group>
             <Form.Label>Event Name</Form.Label>
             <Form.Control
+              required
               onChange={handleInputChange('name')}
               value={controls.name.value}
             />
@@ -113,9 +116,19 @@ const CreateEventPage = ({ history }) => {
           <Form.Group>
             <Form.Label>Group</Form.Label>
             <Form.Control
+              required
+              as="select"
               onChange={handleInputChange('group')}
               value={controls.group.value}
-            />
+            >
+              <option value="choose" disabled>Choose</option>
+              {groups.map((group) => (
+                <option value={group.id} key={group.id}>{group.name}</option>
+              ))}
+            </Form.Control>
+            <Form.Control.Feedback type="invalid">
+              Please provide a valid state.
+            </Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
             <Form.Label>Upload photos</Form.Label>
@@ -161,6 +174,10 @@ const CreateEventPage = ({ history }) => {
     </CenterContainer>
 
   );
+};
+
+CreateEventPage.propTypes = {
+  history: PropTypes.object.isRequired,
 };
 
 export default withRouter(CreateEventPage);

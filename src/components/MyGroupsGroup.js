@@ -36,7 +36,7 @@ const MyGroupsGroup = ({ group, history }) => {
         <Button variant="link" style={styles.title} onClick={handleGroupClicked}>{group.name}</Button>
       </div>
 
-      <div>
+      <div style={{ whiteSpace: 'nowrap', overflowX: 'scroll' }}>
         {group.users.map((user) => (
           <Avatar
             radius={80}

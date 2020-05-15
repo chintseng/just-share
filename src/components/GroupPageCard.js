@@ -33,7 +33,7 @@ const GroupPageCard = ({ event, history }) => {
     <Card style={styles.container} onClick={handleCardClicked}>
       <FlexHeightImage image={event.pictures[0].url} height="100%" />
       <Card.Body style={styles.body}>
-        <Card.Title>{event.title}</Card.Title>
+        <Card.Title>{event.name}</Card.Title>
         <Card.Subtitle>{moment(new Date(event.added_date)).format('L')}</Card.Subtitle>
         <Card.Subtitle style={styles.subsubtitle}>{`${event.pictures.length} photos`}</Card.Subtitle>
       </Card.Body>
