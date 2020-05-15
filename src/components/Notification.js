@@ -20,7 +20,6 @@ const styles = {
 };
 
 const Notification = () => {
-  const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const client = useSelector((state) => state.mqtt.client);
   const messages = useSelector((state) => state.mqtt.messages);
@@ -45,7 +44,7 @@ const Notification = () => {
         trigger="click"
         placement="bottom"
         overlay={(
-          <Popover show={show} id="notifications-popover">
+          <Popover id="notifications-popover">
             <Popover.Title as="h3">Notifications</Popover.Title>
             <ListGroup>
               {messages.map((message) => (

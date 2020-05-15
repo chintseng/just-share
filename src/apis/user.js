@@ -12,15 +12,6 @@ const baseURL = process.env.REACT_APP_ENDPOINT;
 const api = new API(baseURL);
 
 export const getAllEventsAPI = (token) => {
-  // const events = mockEvents;
-  // return events.map((event) => ({
-  //   ...event,
-  //   group: {
-  //     ...mockGroups[event.gid],
-  //     gid: event.gid,
-  //   },
-  //   gid: undefined,
-  // }));
   const options = {
     endpoint: '/events',
     token: `Bearer ${token}`,
@@ -30,18 +21,18 @@ export const getAllEventsAPI = (token) => {
 
 export const createEventAPI = async (token, event) => {
   const {
-    photos, name, gid, date,
+    urls, name, gid, date,
   } = event;
   if (name.trim() === '' || gid.trim() === '' || !moment(new Date(date)).isValid()) {
     throw Error('Something went wrong');
   }
 
-  const urls = await Promise.all(photos.map(async (photo) => {
-    const ref = storage.ref().child(`photos/${uuidv4()}.jpg`);
-    await ref.putString(photo.image, 'data_url');
-    const url = await ref.getDownloadURL();
-    return url;
-  }));
+  // const urls = await Promise.all(photos.map(async (photo) => {
+  //   const ref = storage.ref().child(`photos/${uuidv4()}.jpg`);
+  //   await ref.putString(photo.image, 'data_url');
+  //   const url = await ref.getDownloadURL();
+  //   return url;
+  // }));
   const body = {
     name,
     group: {
@@ -119,4 +110,25 @@ export const getCurrentUserAPI = async (token) => {
   };
 
   return api.get(options);
+};
+
+export const uploadImagesAPI = async (photos) => {
+  const urls = await Promise.all(photos.map(async (photo) => {
+    const ref = storage.ref().child(`photos/${uuidv4()}.jpg`);
+    await ref.putString(photo.image, 'data_url');
+    const url = await ref.getDownloadURL();
+    return url;
+  }));
+  return urls;
+};
+
+export const uploadImageUrlsAPI = async (token, eid, urls) => {
+  const options = {
+    token: `Bearer ${token}`,
+    endpoint: `/event/${eid}/pictures`,
+    body: {
+      pictures: urls,
+    },
+  };
+  return api.post(options);
 };

@@ -34,13 +34,16 @@ const MyGroupsGroup = ({ group, history }) => {
     <div style={styles.container}>
       <div style={{ marginBottom: 20 }}>
         <Button variant="link" style={styles.title} onClick={handleGroupClicked}>{group.name}</Button>
-        {/* <Button style={styles.addButton}>
-        <FontAwesomeIcon icon={faPlus} size="xs" />
-      </Button> */}
       </div>
 
       <div>
-        {group.users.map((user) => <Avatar radius={80} key={user.id} image={user.id.toString()} />)}
+        {group.users.map((user) => (
+          <Avatar
+            radius={80}
+            key={user.id}
+            image={user.icon_url}
+          />
+        ))}
       </div>
     </div>
   );

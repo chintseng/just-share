@@ -1,4 +1,4 @@
-import { USER_SET_EVENTS, USER_SET_CURRENT_EVENT } from '../actionTypes';
+import { USER_SET_EVENTS, USER_SET_CURRENT_EVENT, USER_ADD_IMAGES } from '../actionTypes';
 
 const initialState = {
   events: [],
@@ -17,6 +17,17 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         currentEvent: action.currentEvent,
+      };
+    case USER_ADD_IMAGES:
+      return {
+        ...state,
+        currentEvent: {
+          ...state.currentEvent,
+          pictures: [
+            ...action.pictures,
+            ...state.currentEvent.pictures,
+          ],
+        },
       };
     default:
       return state;

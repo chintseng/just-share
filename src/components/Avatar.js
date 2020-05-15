@@ -16,13 +16,17 @@ const styles = {
     borderRadius: '50%',
     display: 'inline-block',
     marginRight: 10,
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
   },
 };
 
 const Avatar = ({ image, radius }) => (
   <div style={{
     ...styles.container,
-    backgroundColor: COLORS[Number(image) % COLORS.length],
+    // backgroundColor: COLORS[Number(image) % COLORS.length],
+    backgroundImage: `url(${image})`,
     width: radius,
     height: radius,
   }}
