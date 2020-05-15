@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import { withRouter } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import CenterContainer from './CenterContainer';
@@ -18,7 +20,7 @@ const styles = {
   },
 };
 
-const CreateGroupPage = () => {
+const CreateGroupPage = ({ history }) => {
   const [controls, setControls] = useState({
     name: {
       value: '',
@@ -37,6 +39,7 @@ const CreateGroupPage = () => {
         members: controls.members.value,
       };
       await dispatch(createGroup(group));
+      history.push('/mygroups');
     } catch (error) {
       setErr(true);
     }
@@ -88,4 +91,8 @@ const CreateGroupPage = () => {
   );
 };
 
-export default CreateGroupPage;
+CreateGroupPage.propTypes = {
+  history: PropTypes.object.isRequired,
+};
+
+export default withRouter(CreateGroupPage);

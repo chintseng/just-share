@@ -35,10 +35,10 @@ const styles = {
 const AuthPage = () => {
   const [controls, setControls] = useState({
     username: {
-      value: 'hellosirandy',
+      value: '',
     },
     password: {
-      value: 'test1234',
+      value: '',
     },
   });
 
