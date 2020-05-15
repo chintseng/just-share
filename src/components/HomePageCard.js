@@ -32,7 +32,7 @@ const HomePageCard = ({ event, history }) => {
       <Card.Body style={styles.body}>
         <Card.Title>{event.name}</Card.Title>
         <Card.Subtitle>{moment(new Date(event.added_date)).format('L')}</Card.Subtitle>
-        <Card.Subtitle style={styles.subsubtitle}>{`${event.pictures.length} photos`}</Card.Subtitle>
+        <Card.Subtitle style={styles.subsubtitle}>{`${event.pictures_size} photos`}</Card.Subtitle>
         <Card.Subtitle style={styles.subsubtitle}>{`With ${event.group.name}`}</Card.Subtitle>
       </Card.Body>
     </Card>

@@ -61,7 +61,16 @@ const EventPage = ({ match, history }) => {
       console.log(e);
     }
   };
-
+  let filteredPics = [];
+  if (event) {
+    if (tagSelected === 'All') {
+      filteredPics = event.pictures;
+    } else if (tagSelected === 'Bestshots') {
+      filteredPics = event.pictures.filter((picture) => picture.is_bestshot);
+    } else {
+      filteredPics = event.pictures.filter((picture) => picture.class === tagSelected.toLowerCase());
+    }
+  }
   const handleGroupClicked = () => {
     history.push(`/group/${event.group.id}`);
   };
@@ -102,7 +111,7 @@ const EventPage = ({ match, history }) => {
             />
           ))}
         </div>
-        <EventAlbum images={event.pictures} />
+        <EventAlbum images={filteredPics} />
       </>
     </CenterContainer>
   );

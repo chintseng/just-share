@@ -111,3 +111,12 @@ export const subscribeClassAPI = async (token, eid, className) => {
   };
   return api.post(options);
 };
+
+export const getCurrentUserAPI = async (token) => {
+  const options = {
+    endpoint: '/user',
+    token: `Bearer ${token}`,
+  };
+
+  return api.get(options);
+};

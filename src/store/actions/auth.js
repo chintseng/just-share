@@ -3,6 +3,7 @@ import { AUTH_SIGNIN } from '../loadingTypes';
 import { uiStartLoading, uiStopLoading } from './ui';
 import { AUTH_SET_TOKEN, LOG_OUT } from '../actionTypes';
 import { signInAPI, refreshTokenAPI } from '../../apis/auth';
+import { getCurrentUserAPI } from '../../apis/user';
 
 const setToken = (token, username) => ({
   type: AUTH_SET_TOKEN,
@@ -10,14 +11,12 @@ const setToken = (token, username) => ({
   username,
 });
 
-const storeToken = (token, expirationTime, refreshToken, username) => (dispatch) => {
-  dispatch(setToken(token, username));
+const storeToken = (token, expirationTime, refreshToken) => async (dispatch) => {
+  const user = await getCurrentUserAPI(token);
+  dispatch(setToken(token, user.username));
   localStorage.setItem('just_share:auth:token', token);
   localStorage.setItem('just_share:auth:expirationTime', expirationTime.toString());
   localStorage.setItem('just_share:auth:refreshToken', refreshToken);
-  if (username) {
-    localStorage.setItem('just_share:auth:username', username);
-  }
 };
 
 export const signIn = (username, password) => async (dispatch) => {
