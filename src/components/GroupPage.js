@@ -30,7 +30,7 @@ const GroupPage = ({ match }) => {
       <>
         <PageTitle>{group.name}</PageTitle>
         <div>
-          {group.users.map((user) => <Avatar key={user.id} image={user.id.toString()} />)}
+          {group.users.map((user) => <Avatar key={user.id} image={user.icon_url} />)}
         </div>
         <Container fluid style={styles.eventsField}>
           <Row>
