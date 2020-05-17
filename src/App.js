@@ -10,6 +10,7 @@ import LandingPage from './components/LandingPage';
 import AuthPage from './components/AuthPage';
 import { getToken } from './store/actions/auth';
 import MainApp from './components/MainApp';
+import MessagePage from './components/MessagePage';
 
 const App = () => {
   const [loaded, setLoaded] = useState(false);
@@ -42,7 +43,7 @@ const App = () => {
           }}
         />
         <Route
-          path="/(home|event|group|mygroups|creategroup|createevent|message)"
+          path="/(home|event|group|mygroups|creategroup|createevent)"
           render={(p) => {
             if (isAuthenticated) {
               return (<MainApp />);
@@ -50,6 +51,7 @@ const App = () => {
             return (<Redirect to={{ pathname: '/login', state: { nextPathName: p.location.pathname, nextSearch: p.location.search } }} />);
           }}
         />
+        <Route path="/message" component={MessagePage} />
         <Route
           path="/(login|signout)"
           exact
