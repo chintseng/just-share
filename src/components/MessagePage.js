@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -52,6 +53,9 @@ const MyContract = new web3.eth.Contract([
 ], '0x81Ec73a7379a0f01467459f701dDE0c610fFe370');
 
 const styles = {
+  container: {
+    marginTop: 56,
+  },
   form: {
     maxWidth: 500,
   },
@@ -118,46 +122,49 @@ const MessagePage = () => {
     handleInputChange('anonymous')({ target: { value: !controls.anonymous.value } });
   };
 
+  const isAuthenticated = useSelector((state) => Boolean(state.auth.token));
   return (
-    <CenterContainer>
-      <>
-        <div style={styles.headerSection}>
-          <PageTitle>Message Board</PageTitle>
-          <div>
-            <Button style={styles.button} variant="primary" onClick={fetchMessagesOwners}>
-              Refresh Messages
-            </Button>
+    <div style={styles.container}>
+      <CenterContainer>
+        <>
+          <div style={styles.headerSection}>
+            <PageTitle>Message Board</PageTitle>
+            <div>
+              <Button style={styles.button} variant="primary" onClick={fetchMessagesOwners}>
+                Refresh Messages
+              </Button>
+            </div>
           </div>
-        </div>
 
-        <Form onSubmit={handleFormSubmitted}>
-          <Form.Group>
-            <Form.Label>Leave a message:</Form.Label>
-            <Form.Control value={controls.newMessage.value} as="textarea" rows="3" onChange={handleInputChange('newMessage')} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Check type="checkbox" label="Anonymous" checked={controls.anonymous.value} onChange={handleAnonymousToggle} />
-          </Form.Group>
-          <Button style={styles.button} variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
+          <Form onSubmit={handleFormSubmitted}>
+            <Form.Group>
+              <Form.Label>Leave a message:</Form.Label>
+              <Form.Control value={controls.newMessage.value} as="textarea" rows="3" onChange={handleInputChange('newMessage')} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Check disabled={!isAuthenticated} type="checkbox" label="Anonymous" checked={controls.anonymous.value} onChange={handleAnonymousToggle} />
+            </Form.Group>
+            <Button style={styles.button} variant="primary" type="submit">
+              Submit
+            </Button>
+          </Form>
 
 
-        <div style={{ marginTop: 30 }}>
-          {messages.map((msg) => (
-            <Card style={{ width: '100%', marginBottom: 20 }} key={uuidv4()}>
-              <Card.Header>{msg.owner}</Card.Header>
-              <Card.Body>
-                <Card.Text>
-                  {msg.value}
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          ))}
-        </div>
-      </>
-    </CenterContainer>
+          <div style={{ marginTop: 30 }}>
+            {messages.map((msg) => (
+              <Card style={{ width: '100%', marginBottom: 20 }} key={uuidv4()}>
+                <Card.Header>{msg.owner}</Card.Header>
+                <Card.Body>
+                  <Card.Text>
+                    {msg.value}
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            ))}
+          </div>
+        </>
+      </CenterContainer>
+    </div>
   );
 };
 

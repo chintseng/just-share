@@ -46,9 +46,13 @@ const NavBar = ({ history }) => {
               <Button style={{ color: 'white' }} onClick={handleAddEventClicked}>Add Event</Button>
               <Button style={{ color: 'white' }} onClick={handleLogOutClicked}>Logout</Button>
             </>
-            // <Button onClick={handleLogOutClicked} style={{ color: 'white' }}>Logout</Button>
           )
-            : <Button onClick={handleLoginClicked} style={{ color: 'white' }}>Login</Button>}
+            : (
+              <>
+                <Button style={{ color: 'white' }} onClick={handleMessageBoardClicked}>Message Board</Button>
+                <Button onClick={handleLoginClicked} style={{ color: 'white' }}>Login</Button>
+              </>
+            )}
         </Navbar.Collapse>
       </>
     </Navbar>
