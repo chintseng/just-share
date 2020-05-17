@@ -54,7 +54,7 @@ const AuthPage = () => {
     });
   };
 
-  const handleFormSubmitted = (event) => {
+  const handleFormSubmitted = async (event) => {
     event.preventDefault();
     const {
       username: { value: username },

@@ -22,10 +22,11 @@ const storeToken = (token, expirationTime, refreshToken) => async (dispatch) => 
 export const signIn = (username, password) => async (dispatch) => {
   dispatch(uiStartLoading(AUTH_SIGNIN));
   try {
+    const result = await signInAPI(username, password);
     const {
       access_token: token,
       refresh_token: refreshToken,
-    } = await signInAPI(username, password);
+    } = result;
     const expirationTime = moment().add(30, 'm').toDate().getTime();
     dispatch(storeToken(token, expirationTime, refreshToken, username));
     dispatch(uiStopLoading(AUTH_SIGNIN));

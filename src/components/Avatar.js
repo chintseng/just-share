@@ -1,16 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const COLORS = [
-  'CadetBlue',
-  'CornflowerBlue',
-  'DarkKhaki',
-  'Gainsboro',
-  'GoldenRod',
-  'HotPink',
-  'LightCoral',
-];
-
 const styles = {
   container: {
     borderRadius: '50%',

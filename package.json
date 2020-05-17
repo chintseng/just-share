@@ -29,9 +29,10 @@
   },
   "scripts": {
     "start": "REACT_APP_ENDPOINT=http://flask-env.eba-m2jsxfrb.us-west-2.elasticbeanstalk.com react-scripts start",
-    "build": "react-scripts build",
+    "build": "REACT_APP_ENDPOINT=http://flask-env.eba-m2jsxfrb.us-west-2.elasticbeanstalk.com react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "firebase deploy --only hosting"
   },
   "eslintConfig": {
     "extends": "react-app"
