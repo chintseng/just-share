@@ -47,8 +47,8 @@ const validateToken = () => async (dispatch, getState) => {
     const parsedExpiration = new Date(parseInt(expirationFromStorage, 10));
     const now = new Date();
     if (parsedExpiration > now) {
-      const username = localStorage.getItem('just_share:auth:username');
-      dispatch(setToken(tokenFromStorage, username));
+      const user = await getCurrentUserAPI(tokenFromStorage);
+      dispatch(setToken(tokenFromStorage, user.username));
       return tokenFromStorage;
     }
     throw new Error();
