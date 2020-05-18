@@ -110,10 +110,10 @@ const MessagePage = () => {
     });
   };
 
+  const username = useSelector((state) => Boolean(state.auth.username));
   const handleFormSubmitted = (e) => {
     e.preventDefault();
     handleInputChange('newMessage')({ target: { value: '' } });
-    const username = useSelector((state) => Boolean(state.auth.username));
     MyContract.methods
       .addMessage(`${controls.anonymous.value ? '' : `${username}:`}${controls.newMessage.value}`)
       .send({ from: web3.eth.defaultAccount });
