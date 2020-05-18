@@ -28,7 +28,7 @@ export const signIn = (username, password) => async (dispatch) => {
       refresh_token: refreshToken,
     } = result;
     const expirationTime = moment().add(30, 'm').toDate().getTime();
-    dispatch(storeToken(token, expirationTime, refreshToken, username));
+    await dispatch(storeToken(token, expirationTime, refreshToken, username));
     dispatch(uiStopLoading(AUTH_SIGNIN));
   } catch (e) {
     dispatch(uiStopLoading(AUTH_SIGNIN));
@@ -81,7 +81,7 @@ export const getToken = () => async (dispatch) => {
       return null;
     }
     const expirationTime = moment().add(30, 'm').toDate().getTime();
-    dispatch(storeToken(token, expirationTime, refreshToken));
+    await dispatch(storeToken(token, expirationTime, refreshToken));
     return token;
   }
 };
