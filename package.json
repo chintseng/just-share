@@ -28,8 +28,8 @@
     "web3": "^1.2.7"
   },
   "scripts": {
-    "start": "REACT_APP_ENDPOINT=http://flask-env.eba-m2jsxfrb.us-west-2.elasticbeanstalk.com react-scripts start",
-    "build": "REACT_APP_ENDPOINT=http://flask-env.eba-m2jsxfrb.us-west-2.elasticbeanstalk.com react-scripts build",
+    "start": "REACT_APP_ENDPOINT=https://api.justshare.info react-scripts start",
+    "build": "REACT_APP_ENDPOINT=https://api.justshare.info react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "firebase deploy --only hosting"
